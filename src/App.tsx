@@ -86,7 +86,12 @@ function App() {
     setWhiteDice(c => c > 0 ? c - 1 : 0)
   }
 
-  const getRandomInt = (max) => {
+  /**
+   * Returns a random integer in a given range
+   * @param max Max value, noninclusive
+   * @returns A pseudo-random number from [0, max)
+   */
+  const getRandomInt = (max: number) => {
     return Math.floor(Math.random() * max);
   }
 
@@ -267,7 +272,7 @@ function App() {
 
     // Advantages/Threats
     if (netAdvantages >= 0) {
-      message += `${netAdvantages} advantage${netSuccesses === 1 ? "" : "s"}`
+      message += `${netAdvantages} advantage${netAdvantages === 1 ? "" : "s"}`
     } else {
       const netThreats = Math.abs(netAdvantages)
       message += `${netThreats} threat${netThreats === 1 ? "" : "s"}`
@@ -290,6 +295,48 @@ function App() {
     return ""
   }
 
+  const rerollGreen = (index: number) => {
+    const newRoll = greenDiceValues[getRandomInt(8)]
+    greenRolls[index] = newRoll
+    setRolls({...rolls})
+  }
+
+  const rerollYellow = (index: number) => {
+    const newRoll = yellowDiceValues[getRandomInt(12)]
+    yellowRolls[index] = newRoll
+    setRolls({...rolls})
+  }
+
+  const rerollBlue = (index: number) => {
+    const newRoll = blueDiceValues[getRandomInt(6)]
+    blueRolls[index] = newRoll
+    setRolls({...rolls})
+  }
+
+  const rerollPurple = (index: number) => {
+    const newRoll = purpleDiceValues[getRandomInt(8)]
+    purpleRolls[index] = newRoll
+    setRolls({...rolls})
+  }
+
+  const rerollBlack = (index: number) => {
+    const newRoll = blackDiceValues[getRandomInt(6)]
+    blackRolls[index] = newRoll
+    setRolls({...rolls})
+  }
+
+  const rerollRed = (index: number) => {
+    const newRoll = redDiceValues[getRandomInt(12)]
+    redRolls[index] = newRoll
+    setRolls({...rolls})
+  }
+
+  const rerollWhite = (index: number) => {
+    const newRoll = whiteDiceValues[getRandomInt(8)]
+    whiteRolls[index] = newRoll
+    setRolls({...rolls})
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -308,55 +355,55 @@ function App() {
         <NoMargins><Bold>Net Results</Bold>: {formatNetResults()}{formatTriumphs()}{formatDespairs()}</NoMargins>
         <Tooltip>*Successes/Failures from triumphs and despairs are included in the net results.</Tooltip>
         <div>
-          {greenRolls.map((roll) => {
+          {greenRolls.map((roll, index) => {
             const successes = roll.success;
             const advantages = roll.advantage
             return (
-              <RollContainer><Green>G</Green>: {successes ? successes : 0} success{successes === 1 ? "" : "es"}, {advantages ? advantages : 0} advantage{advantages === 1 ? "" : "s"}</RollContainer>
+              <RollContainer><Green>G</Green>: {successes ? successes : 0} success{successes === 1 ? "" : "es"}, {advantages ? advantages : 0} advantage{advantages === 1 ? "" : "s"}<button onClick={() => rerollGreen(index)}>Reroll?</button></RollContainer>
             )
           })}
-          {yellowRolls.map((roll) => {
+          {yellowRolls.map((roll, index) => {
             const successes = roll.success;
             const advantages = roll.advantage
             const triumphs = roll.triumph
             return (
-              <RollContainer><Yellow>Y</Yellow>: {successes ? successes : 0} success{successes === 1 ? "" : "es"}, {advantages ? advantages : 0} advantage{advantages === 1 ? "" : "s"}{triumphs ? <>, <Yellow>1 TRIUMPH</Yellow></>: ""}</RollContainer>
+              <RollContainer><Yellow>Y</Yellow>: {successes ? successes : 0} success{successes === 1 ? "" : "es"}, {advantages ? advantages : 0} advantage{advantages === 1 ? "" : "s"}{triumphs ? <>, <Yellow>1 TRIUMPH</Yellow></>: ""}<button onClick={() => rerollYellow(index)}>Reroll?</button></RollContainer>
             )
           })}
-          {blueRolls.map((roll) => {
+          {blueRolls.map((roll, index) => {
             const successes = roll.success;
             const advantages = roll.advantage
             return (
-              <RollContainer><Blue>B</Blue>: {successes ? successes : 0} success{successes === 1 ? "" : "es"}, {advantages ? advantages : 0} advantage{advantages === 1 ? "" : "s"}</RollContainer>
+              <RollContainer><Blue>B</Blue>: {successes ? successes : 0} success{successes === 1 ? "" : "es"}, {advantages ? advantages : 0} advantage{advantages === 1 ? "" : "s"}<button onClick={() => rerollBlue(index)}>Reroll?</button></RollContainer>
             )
           })}
-          {purpleRolls.map((roll) => {
+          {purpleRolls.map((roll, index) => {
             const failures = roll.failure;
             const threats = roll.threat
             return (
-              <RollContainer><Purple>P</Purple>: {failures ? failures : 0} failure{failures === 1 ? "" : "s"}, {threats ? threats : 0} threat{threats === 1 ? "" : "s"}</RollContainer>
+              <RollContainer><Purple>P</Purple>: {failures ? failures : 0} failure{failures === 1 ? "" : "s"}, {threats ? threats : 0} threat{threats === 1 ? "" : "s"}<button onClick={() => rerollPurple(index)}>Reroll?</button></RollContainer>
             )
           })}
-          {blackRolls.map((roll) => {
+          {blackRolls.map((roll, index) => {
             const failures = roll.failure;
             const threats = roll.threat
             return (
-              <RollContainer><Black>B</Black>: {failures ? failures : 0} failure{failures === 1 ? "" : "s"}, {threats ? threats : 0} threat{threats === 1 ? "" : "s"}</RollContainer>
+              <RollContainer><Black>B</Black>: {failures ? failures : 0} failure{failures === 1 ? "" : "s"}, {threats ? threats : 0} threat{threats === 1 ? "" : "s"}<button onClick={() => rerollBlack(index)}>Reroll?</button></RollContainer>
             )
           })}
-          {redRolls.map((roll) => {
+          {redRolls.map((roll, index) => {
             const failures = roll.failure;
             const threats = roll.threat
             const despairs = roll.despair;
             return (
-              <RollContainer><Red>R</Red>: {failures ? failures : 0} failure{failures === 1 ? "" : "s"}, {threats ? threats : 0} threat{threats === 1 ? "" : "s"}{despairs ? <>, <Red>1 DESPAIR</Red></>: ""}</RollContainer>
+              <RollContainer><Red>R</Red>: {failures ? failures : 0} failure{failures === 1 ? "" : "s"}, {threats ? threats : 0} threat{threats === 1 ? "" : "s"}{despairs ? <>, <Red>1 DESPAIR</Red></>: ""}<button onClick={() => rerollRed(index)}>Reroll?</button></RollContainer>
             )
           })}
-          {whiteRolls.map((roll) => {
+          {whiteRolls.map((roll, index) => {
             const whitePips = roll.white;
             const blackPips = roll.black;
             return (
-              <RollContainer><White>W</White>: <White>{whitePips ? whitePips : 0} white pip{whitePips === 1 ? "" : "s"}</White>, <Black>{blackPips ? blackPips : 0} black pip{blackPips === 1 ? "" : "s"}</Black></RollContainer>
+              <RollContainer><White>W</White>: <White>{whitePips ? whitePips : 0} white pip{whitePips === 1 ? "" : "s"}</White>, <Black>{blackPips ? blackPips : 0} black pip{blackPips === 1 ? "" : "s"}</Black><button onClick={() => rerollWhite(index)}>Reroll?</button></RollContainer>
             )
           })}
         </div>
