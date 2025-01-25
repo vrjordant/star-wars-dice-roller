@@ -337,6 +337,16 @@ function App() {
     setRolls({...rolls})
   }
 
+  const clearDice = () => {
+    setGreenDice(0)
+    setYellowDice(0)
+    setBlueDice(0)
+    setPurpleDice(0)
+    setBlackDice(0)
+    setRedDice(0)
+    setWhiteDice(0)
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -349,7 +359,10 @@ function App() {
         <DiceContainer><Black>Black</Black>: {blackDice}<button onClick={addBlackDice}>+</button><button onClick={removeBlackDice}>-</button></DiceContainer>
         <DiceContainer><Red>Red</Red>: {redDice}<button onClick={addRedDice}>+</button><button onClick={removeRedDice}>-</button></DiceContainer>
         <DiceContainer><White>White</White>: {whiteDice}<button onClick={addWhiteDice}>+</button><button onClick={removeWhiteDice}>-</button></DiceContainer>
-        <RollButton onClick={rollDice}>Roll!</RollButton>
+        <div>
+          <RollButton onClick={rollDice}>Roll!</RollButton>
+          <RollButton onClick={clearDice}>Clear</RollButton>
+        </div>
         <h2>Roll Results</h2>
         <NoMargins><Bold>Force Dice</Bold>: <White>{whitePips} white pip{whitePips === 1 ? "" : "s"}</White>, <Black>{blackPips} black pip{blackPips === 1 ? "" : "s"}</Black></NoMargins>
         <NoMargins><Bold>Net Results</Bold>: {formatNetResults()}{formatTriumphs()}{formatDespairs()}</NoMargins>
