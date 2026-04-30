@@ -11,7 +11,28 @@ function App() {
   const [redDice, setRedDice] = useState<number>(0)
   const [whiteDice, setWhiteDice] = useState<number>(0)
 
-  const [rolls, setRolls] = useState({
+  interface RollResult {
+    success?: number;
+    advantage?: number;
+    failure?: number;
+    threat?: number;
+    triumph?: number;
+    despair?: number;
+    white?: number;
+    black?: number;
+  }
+
+  interface Rolls {
+    greenRolls: RollResult[];
+    yellowRolls: RollResult[];
+    blueRolls: RollResult[];
+    purpleRolls: RollResult[];
+    blackRolls: RollResult[];
+    redRolls: RollResult[];
+    whiteRolls: RollResult[];
+  }
+
+  const [rolls, setRolls] = useState<Rolls>({
     greenRolls: [],
     yellowRolls: [],
     blueRolls: [],
@@ -30,60 +51,56 @@ function App() {
   const redDiceValues = [ {}, { failure: 1}, { threat: 1}, { failure: 2}, { failure: 1, threat: 1}, { threat: 2}, { despair: 1, failure: 1}, { threat: 1}, { failure: 2}, { threat: 1, failure: 1}, { threat: 2}, { failure: 1}]
   const whiteDiceValues = [ { black: 2}, { black: 1}, { black: 1}, { black: 1}, { white: 1}, { white: 2}, { white: 2}, { white: 2}, { white: 1}, { black: 1}, { black: 1}, {black: 1}]
 
-  const addGreenDice = () => {
-    setGreenDice(c => c + 1)
+  const addDie = (color: string) => {
+    switch(color) {
+      case "green":
+        setGreenDice(c => c + 1)
+        break
+      case "yellow":
+        setYellowDice(c => c + 1)
+        break
+      case "blue":
+        setBlueDice(c => c + 1)
+        break
+      case "purple":
+        setPurpleDice(c => c + 1)
+        break
+      case "black":
+        setBlackDice(c => c + 1)
+        break
+      case "red":
+        setRedDice(c => c + 1)
+        break
+      case "white":
+        setWhiteDice(c => c + 1)
+        break
+    }
   }
 
-  const addYellowDice = () => {
-    setYellowDice(c => c + 1)
-  }
-
-  const addBlueDice = () => {
-    setBlueDice(c => c + 1)
-  }
-
-  const addPurpleDice = () => {
-    setPurpleDice(c => c + 1)
-  }
-
-  const addBlackDice = () => {
-    setBlackDice(c => c + 1)
-  }
-
-  const addRedDice = () => {
-    setRedDice(c => c + 1)
-  }
-
-  const addWhiteDice = () => {
-    setWhiteDice(c => c + 1)
-  }
-
-  const removeGreenDice = () => {
-    setGreenDice(c => c > 0 ? c - 1 : 0)
-  }
-
-  const removeYellowDice = () => {
-    setYellowDice(c => c > 0 ? c - 1 : 0)
-  }
-
-  const removeBlueDice = () => {
-    setBlueDice(c => c > 0 ? c - 1 : 0)
-  }
-
-  const removePurpleDice = () => {
-    setPurpleDice(c => c > 0 ? c - 1 : 0)
-  }
-
-  const removeBlackDice = () => {
-    setBlackDice(c => c > 0 ? c - 1 : 0)
-  }
-
-  const removeRedDice = () => {
-    setRedDice(c => c > 0 ? c - 1 : 0)
-  }
-
-  const removeWhiteDice = () => {
-    setWhiteDice(c => c > 0 ? c - 1 : 0)
+  const removeDie = (color: string) => {
+    switch(color) {
+      case "green":
+        setGreenDice(c => c > 0 ? c - 1 : 0)
+        break
+      case "yellow":
+        setYellowDice(c => c > 0 ? c - 1 : 0)
+        break
+      case "blue":
+        setBlueDice(c => c > 0 ? c - 1 : 0)
+        break
+      case "purple":
+        setPurpleDice(c => c > 0 ? c - 1 : 0)
+        break
+      case "black":
+        setBlackDice(c => c > 0 ? c - 1 : 0)
+        break
+      case "red":
+        setRedDice(c => c > 0 ? c - 1 : 0)
+        break
+      case "white":
+        setWhiteDice(c => c > 0 ? c - 1 : 0)
+        break
+    }
   }
 
   /**
@@ -96,14 +113,15 @@ function App() {
   }
 
   const rollDice = async () => {
-    const greenRolls: any[] = []
-    const yellowRolls: any[] = []
-    const blueRolls: any[] = []
-    const purpleRolls: any[] = []
-    const blackRolls: any[] = []
-    const redRolls: any[] = []
-    const whiteRolls: any[] = []
+    const greenRolls: RollResult[] = []
+    const yellowRolls: RollResult[] = []
+    const blueRolls: RollResult[] = []
+    const purpleRolls: RollResult[] = []
+    const blackRolls: RollResult[] = []
+    const redRolls: RollResult[] = []
+    const whiteRolls: RollResult[] = []
 
+    // Green dice
     for (let currentGreen = 0; currentGreen < greenDice; currentGreen++) {
       const diceRoll = greenDiceValues[getRandomInt(8)]
       greenRolls.push(diceRoll)
@@ -295,45 +313,41 @@ function App() {
     return ""
   }
 
-  const rerollGreen = (index: number) => {
-    const newRoll = greenDiceValues[getRandomInt(8)]
-    greenRolls[index] = newRoll
-    setRolls({...rolls})
-  }
-
-  const rerollYellow = (index: number) => {
-    const newRoll = yellowDiceValues[getRandomInt(12)]
-    yellowRolls[index] = newRoll
-    setRolls({...rolls})
-  }
-
-  const rerollBlue = (index: number) => {
-    const newRoll = blueDiceValues[getRandomInt(6)]
-    blueRolls[index] = newRoll
-    setRolls({...rolls})
-  }
-
-  const rerollPurple = (index: number) => {
-    const newRoll = purpleDiceValues[getRandomInt(8)]
-    purpleRolls[index] = newRoll
-    setRolls({...rolls})
-  }
-
-  const rerollBlack = (index: number) => {
-    const newRoll = blackDiceValues[getRandomInt(6)]
-    blackRolls[index] = newRoll
-    setRolls({...rolls})
-  }
-
-  const rerollRed = (index: number) => {
-    const newRoll = redDiceValues[getRandomInt(12)]
-    redRolls[index] = newRoll
-    setRolls({...rolls})
-  }
-
-  const rerollWhite = (index: number) => {
-    const newRoll = whiteDiceValues[getRandomInt(8)]
-    whiteRolls[index] = newRoll
+  const rerollDie = (color: string, index: number) => {
+    let values: RollResult[] = [];
+    let rollsToUpdate: RollResult[] = [];
+    switch(color) {
+      case "green":
+        values = greenDiceValues
+        rollsToUpdate = greenRolls
+        break
+      case "yellow":
+        values = yellowDiceValues
+        rollsToUpdate = yellowRolls
+        break
+      case "blue":
+        values = blueDiceValues
+        rollsToUpdate = blueRolls
+        break
+      case "purple":
+        values = purpleDiceValues
+        rollsToUpdate = purpleRolls
+        break
+      case "black":
+        values = blackDiceValues
+        rollsToUpdate = blackRolls
+        break
+      case "red":
+        values = redDiceValues
+        rollsToUpdate = redRolls
+        break
+      case "white":
+        values = whiteDiceValues
+        rollsToUpdate = whiteRolls
+        break
+    }
+    const newRoll = values[getRandomInt(values.length)]
+    rollsToUpdate[index] = newRoll
     setRolls({...rolls})
   }
 
@@ -352,13 +366,13 @@ function App() {
       <header className="App-header">
         <h1>Star Wars Dice Roller</h1>
         <h2>Current Dice Selection</h2>
-        <DiceContainer><Green>Green</Green>: {greenDice}<button onClick={addGreenDice}>+</button><button onClick={removeGreenDice}>-</button></DiceContainer>
-        <DiceContainer><Yellow>Yellow</Yellow>: {yellowDice}<button onClick={addYellowDice}>+</button><button onClick={removeYellowDice}>-</button></DiceContainer>
-        <DiceContainer><Blue>Blue</Blue>: {blueDice}<button onClick={addBlueDice}>+</button><button onClick={removeBlueDice}>-</button></DiceContainer>
-        <DiceContainer><Purple>Purple</Purple>: {purpleDice}<button onClick={addPurpleDice}>+</button><button onClick={removePurpleDice}>-</button></DiceContainer>
-        <DiceContainer><Black>Black</Black>: {blackDice}<button onClick={addBlackDice}>+</button><button onClick={removeBlackDice}>-</button></DiceContainer>
-        <DiceContainer><Red>Red</Red>: {redDice}<button onClick={addRedDice}>+</button><button onClick={removeRedDice}>-</button></DiceContainer>
-        <DiceContainer><White>White</White>: {whiteDice}<button onClick={addWhiteDice}>+</button><button onClick={removeWhiteDice}>-</button></DiceContainer>
+        <DiceContainer><Green>Green</Green>: {greenDice}<button onClick={() => addDie("green")}>+</button><button onClick={() => removeDie("green")}>-</button></DiceContainer>
+        <DiceContainer><Yellow>Yellow</Yellow>: {yellowDice}<button onClick={() => addDie("yellow")}>+</button><button onClick={() => removeDie("yellow")}>-</button></DiceContainer>
+        <DiceContainer><Blue>Blue</Blue>: {blueDice}<button onClick={() => addDie("blue")}>+</button><button onClick={() => removeDie("blue")}>-</button></DiceContainer>
+        <DiceContainer><Purple>Purple</Purple>: {purpleDice}<button onClick={() => addDie("purple")}>+</button><button onClick={() => removeDie("purple")}>-</button></DiceContainer>
+        <DiceContainer><Black>Black</Black>: {blackDice}<button onClick={() => addDie("black")}>+</button><button onClick={() => removeDie("black")}>-</button></DiceContainer>
+        <DiceContainer><Red>Red</Red>: {redDice}<button onClick={() => addDie("red")}>+</button><button onClick={() => removeDie("red")}>-</button></DiceContainer>
+        <DiceContainer><White>White</White>: {whiteDice}<button onClick={() => addDie("white")}>+</button><button onClick={() => removeDie("white")}>-</button></DiceContainer>
         <div>
           <RollButton onClick={rollDice}>Roll!</RollButton>
           <RollButton onClick={clearDice}>Clear</RollButton>
@@ -372,7 +386,7 @@ function App() {
             const successes = roll.success;
             const advantages = roll.advantage
             return (
-              <RollContainer><Green>G</Green>: {successes ? successes : 0} success{successes === 1 ? "" : "es"}, {advantages ? advantages : 0} advantage{advantages === 1 ? "" : "s"}<button onClick={() => rerollGreen(index)}>Reroll?</button></RollContainer>
+              <RollContainer><Green>G</Green>: {successes ? successes : 0} success{successes === 1 ? "" : "es"}, {advantages ? advantages : 0} advantage{advantages === 1 ? "" : "s"}<button onClick={() => rerollDie("green", index)}>Reroll?</button></RollContainer>
             )
           })}
           {yellowRolls.map((roll, index) => {
@@ -380,28 +394,28 @@ function App() {
             const advantages = roll.advantage
             const triumphs = roll.triumph
             return (
-              <RollContainer><Yellow>Y</Yellow>: {successes ? successes : 0} success{successes === 1 ? "" : "es"}, {advantages ? advantages : 0} advantage{advantages === 1 ? "" : "s"}{triumphs ? <>, <Yellow>1 TRIUMPH</Yellow></>: ""}<button onClick={() => rerollYellow(index)}>Reroll?</button></RollContainer>
+              <RollContainer><Yellow>Y</Yellow>: {successes ? successes : 0} success{successes === 1 ? "" : "es"}, {advantages ? advantages : 0} advantage{advantages === 1 ? "" : "s"}{triumphs ? <>, <Yellow>1 TRIUMPH</Yellow></>: ""}<button onClick={() => rerollDie("yellow", index)}>Reroll?</button></RollContainer>
             )
           })}
           {blueRolls.map((roll, index) => {
             const successes = roll.success;
             const advantages = roll.advantage
             return (
-              <RollContainer><Blue>B</Blue>: {successes ? successes : 0} success{successes === 1 ? "" : "es"}, {advantages ? advantages : 0} advantage{advantages === 1 ? "" : "s"}<button onClick={() => rerollBlue(index)}>Reroll?</button></RollContainer>
+              <RollContainer><Blue>B</Blue>: {successes ? successes : 0} success{successes === 1 ? "" : "es"}, {advantages ? advantages : 0} advantage{advantages === 1 ? "" : "s"}<button onClick={() => rerollDie("blue", index)}>Reroll?</button></RollContainer>
             )
           })}
           {purpleRolls.map((roll, index) => {
             const failures = roll.failure;
             const threats = roll.threat
             return (
-              <RollContainer><Purple>P</Purple>: {failures ? failures : 0} failure{failures === 1 ? "" : "s"}, {threats ? threats : 0} threat{threats === 1 ? "" : "s"}<button onClick={() => rerollPurple(index)}>Reroll?</button></RollContainer>
+              <RollContainer><Purple>P</Purple>: {failures ? failures : 0} failure{failures === 1 ? "" : "s"}, {threats ? threats : 0} threat{threats === 1 ? "" : "s"}<button onClick={() => rerollDie("purple", index)}>Reroll?</button></RollContainer>
             )
           })}
           {blackRolls.map((roll, index) => {
             const failures = roll.failure;
             const threats = roll.threat
             return (
-              <RollContainer><Black>B</Black>: {failures ? failures : 0} failure{failures === 1 ? "" : "s"}, {threats ? threats : 0} threat{threats === 1 ? "" : "s"}<button onClick={() => rerollBlack(index)}>Reroll?</button></RollContainer>
+              <RollContainer><Black>B</Black>: {failures ? failures : 0} failure{failures === 1 ? "" : "s"}, {threats ? threats : 0} threat{threats === 1 ? "" : "s"}<button onClick={() => rerollDie("black", index)}>Reroll?</button></RollContainer>
             )
           })}
           {redRolls.map((roll, index) => {
@@ -409,14 +423,14 @@ function App() {
             const threats = roll.threat
             const despairs = roll.despair;
             return (
-              <RollContainer><Red>R</Red>: {failures ? failures : 0} failure{failures === 1 ? "" : "s"}, {threats ? threats : 0} threat{threats === 1 ? "" : "s"}{despairs ? <>, <Red>1 DESPAIR</Red></>: ""}<button onClick={() => rerollRed(index)}>Reroll?</button></RollContainer>
+              <RollContainer><Red>R</Red>: {failures ? failures : 0} failure{failures === 1 ? "" : "s"}, {threats ? threats : 0} threat{threats === 1 ? "" : "s"}{despairs ? <>, <Red>1 DESPAIR</Red></>: ""}<button onClick={() => rerollDie("red", index)}>Reroll?</button></RollContainer>
             )
           })}
           {whiteRolls.map((roll, index) => {
             const whitePips = roll.white;
             const blackPips = roll.black;
             return (
-              <RollContainer><White>W</White>: <White>{whitePips ? whitePips : 0} white pip{whitePips === 1 ? "" : "s"}</White>, <Black>{blackPips ? blackPips : 0} black pip{blackPips === 1 ? "" : "s"}</Black><button onClick={() => rerollWhite(index)}>Reroll?</button></RollContainer>
+              <RollContainer><White>W</White>: <White>{whitePips ? whitePips : 0} white pip{whitePips === 1 ? "" : "s"}</White>, <Black>{blackPips ? blackPips : 0} black pip{blackPips === 1 ? "" : "s"}</Black><button onClick={() => rerollDie("white", index)}>Reroll?</button></RollContainer>
             )
           })}
         </div>
